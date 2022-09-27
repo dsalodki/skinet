@@ -4,43 +4,48 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.Entities;
 using Core.Interfaces;
+using Core.Specification;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
     public class ProductRepository : IProductRepository
     {
-        private StoreContext _context;
+        private IGenericRepository<Product> _productRepo;
+        private IGenericRepository<ProductBrand> _productBrandRepo;
+        private IGenericRepository<ProductType> _productTypeRepo;
 
-        public ProductRepository(StoreContext context)
+        public ProductRepository(IGenericRepository<Product> productRepo,
+        IGenericRepository<ProductBrand> productBrandRepo,
+        IGenericRepository<ProductType> productTypeRepo)
         {
-            _context = context;
+            _productRepo = productRepo;
+            _productBrandRepo = productBrandRepo;
+            _productTypeRepo = productTypeRepo;
         }
 
         public async Task<IReadOnlyList<ProductBrand>> GetProductBrandsAsync()
         {
-            return await _context.ProductBrands.ToListAsync();
+            return await _productBrandRepo.ListAllAsync();
         }
 
         public async Task<Product> GetProductByIdAsync(int id)
         {
-            return await _context.Products
-                        .Include(p=>p.ProductBrand)
-                        .Include(p=>p.ProductType)
-                        .FirstOrDefaultAsync(x=>x.Id == id);
+            var spec = new ProductsWithTypesAndBrandsSpecification(id);
+
+            return await _productRepo.GetEntityWithSpec(spec);
         }
 
         public async Task<IReadOnlyList<Product>> GetProductsAsync()
         {
-            return await _context.Products
-            .Include(p=>p.ProductBrand)
-            .Include(p=>p.ProductType)
-            .ToListAsync();
+            var spec = new ProductsWithTypesAndBrandsSpecification();
+
+            return await _productRepo.ListAsync(spec);
         }
 
         public async Task<IReadOnlyList<ProductType>> GetProductTypesAsync()
         {
-            return await _context.ProductTypes.ToListAsync();
+            return await _productTypeRepo.ListAllAsync();
         }
     }
 }
