@@ -1,10 +1,7 @@
-using API.Errors;
 using API.Extensions;
 using API.Helpers;
 using API.Middleware;
-using Core.Interfaces;
 using Infrastructure.Data;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +16,13 @@ builder.Services.AddDbContext<StoreContext>(x=>x.UseSqlite(
 
 builder.Services.AddApplicationServices();
 builder.Services.AddSwaggerDocumentation();
+builder.Services.AddCors(opt=>
+{
+    opt.AddPolicy("CorsPolicy", policy=>
+    {
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+    });
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -54,6 +58,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.UseStaticFiles();
+
+app.UseCors("CorsPolicy");
 
 app.MapControllers();
 

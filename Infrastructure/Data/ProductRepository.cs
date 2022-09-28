@@ -36,9 +36,9 @@ namespace Infrastructure.Data
             return await _productRepo.GetEntityWithSpec(spec);
         }
 
-        public async Task<IReadOnlyList<Product>> GetProductsAsync()
+        public async Task<IReadOnlyList<Product>> GetProductsAsync(ProductSpecParams productParams)
         {
-            var spec = new ProductsWithTypesAndBrandsSpecification();
+            var spec = new ProductsWithTypesAndBrandsSpecification(productParams);
 
             return await _productRepo.ListAsync(spec);
         }
