@@ -51,6 +51,7 @@ namespace Core.Specification
         {
             Skip = skip;
             Take = take;
+            IsPagingEnabled = true;
         }
     }
 }
