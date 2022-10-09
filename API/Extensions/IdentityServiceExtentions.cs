@@ -11,7 +11,7 @@ using System.Text;
 
 namespace API.Extensions
 {
-    public static class IdentityServiceExtentions
+    public static class IdentityServiceExtensions
     {
         public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config) {
             var builder = services.AddIdentityCore<AppUser>();
