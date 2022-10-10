@@ -21,7 +21,6 @@ namespace Infrastructure.Data
         public void Add(T entity)
         {
             _context.Set<T>().Add(entity);
-
         }
 
         public async Task<int> CountAsync(ISpecification<T> spec)
