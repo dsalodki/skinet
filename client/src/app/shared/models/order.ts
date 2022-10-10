@@ -13,7 +13,7 @@ export interface IOrder {
     shipToAddress: IAddress;
     deliveryMethod: string;
     shippingPrice: number;
-    OrderItems: IOrderItem[];
+    orderItems: IOrderItem[];
     subtotal: number;
     total: number;
     status: string;
