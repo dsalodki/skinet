@@ -28,7 +28,7 @@ namespace Infrastructure.Services
 
             var serializedResponse = JsonSerializer.Serialize(response, options);
 
-            await _database.StringSetAsync(cacheKey, serializedResponse);
+            await _database.StringSetAsync(cacheKey, serializedResponse, timeToLive);
         }
 
         public async Task<string> GetCachedResponseAsync(string cacheKey)
